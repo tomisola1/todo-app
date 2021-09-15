@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Todo App</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" 
+    integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container">
+      <h2 class="text-center">Todo App</h2>
+      <div class="row justify-content-center">
+        <div class="col-xs-12">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">🔍</span>
+            </div>
+            <input
+              id="search-input"
+              type="text"
+              class="form-control"
+              placeholder="Search"
+              aria-label="Search"
+            />
+          </div>
+        </div>
+      </div>
+      <span class="text-muted" id="edit-text"></span>
+      <main>
+        <% if(locals.existTask){ %>
+            <% let editUrl = existTask._id  %>
+            <form action="<%= editUrl%>" method="POST" id="todo-form">
+                <div class="input-group mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Todo Text"
+                    aria-label="Enter todo Text"
+                    autocomplete="off"
+                    name="title"
+                    id="todo-input"
+                    value="<%= existTask.title%>"
+                  />
+                  <div class="input-group-append">
+                    <button
+                      id="todo-btn"
+                      class="btn btn-outline-secondary"
+                      type="submit"
+                    >
+                      Add Todo
+                    </button>
+                  </div>
+                </div>
+              </form>
+        <% }else{ %>
+            <form action="create-todo" method="POST" id="todo-form">
+                <div class="input-group mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Todo Text"
+                    aria-label="Enter todo Text"
+                    autocomplete="off"
+                    name="title"
+                    id="todo-input"
+                  />
+                  <div class="input-group-append">
+                    <button
+                      id="todo-btn"
+                      class="btn btn-outline-secondary"
+                      type="submit"
+                    >
+                      Add Todo
+                    </button>
+                  </div>
+                </div>
+              </form>
+        <% } %>
+
+        <hr />
+        <ul class="list-group" id="todo-list"></ul>
+      </main>
+    </div>
+    <%if(locals.existTask){%>
+        <div class="todo-content">
+            <div class="details">
+                <p><%= existTask.title%></p>
+                <p><%= existTask.createdAt%>></p>
+            </div>
+            <div class="icons">
+                <a href="/" >
+                    <i class="fas fa-undo-alt">Back to TodoList</i> 
+                </a>
+                
+            </div>
+        </div>
+    <%}else{%>
+        <%if(allTasks.length === 0){%>
+            <h1>No tasks created yet</h1>
+        <%}else{%>
+            <!-- <h1>ENtered</h1> -->
+            <%allTasks.map(task => {%>
+                <!-- <h1>template is the problem</h1> -->
+                <div class="todo-content">
+                    <div class="details">
+                        <p><%= task.title%></p>
+                        <p><%= task.createdAt%>></p>
+                    </div>
+                    <div class="icons">
+                        <% let deleteUrl = task._id + "/delete" %>
+                        <% let editUrl = task._id  %>
+                        <a href="<%= editUrl%>" >
+                            <i class="fas fa-pencil-alt"></i>
+                        </a>
+                        <a href="<%= deleteUrl%>">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            <%})%>
+        <%}%>
+    <%}%>
+   
+  </body>
+</html>
